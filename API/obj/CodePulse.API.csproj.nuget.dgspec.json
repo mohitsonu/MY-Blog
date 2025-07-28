@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\final blog\\CodePulse.API-master\\CodePulse.API-master\\CodePulse.API\\CodePulse.API.csproj": {}
+    "E:\\My-Blog\\API\\CodePulse.API.csproj": {}
   },
   "projects": {
-    "E:\\final blog\\CodePulse.API-master\\CodePulse.API-master\\CodePulse.API\\CodePulse.API.csproj": {
+    "E:\\My-Blog\\API\\CodePulse.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\final blog\\CodePulse.API-master\\CodePulse.API-master\\CodePulse.API\\CodePulse.API.csproj",
+        "projectUniqueName": "E:\\My-Blog\\API\\CodePulse.API.csproj",
         "projectName": "CodePulse.API",
-        "projectPath": "E:\\final blog\\CodePulse.API-master\\CodePulse.API-master\\CodePulse.API\\CodePulse.API.csproj",
+        "projectPath": "E:\\My-Blog\\API\\CodePulse.API.csproj",
         "packagesPath": "C:\\Users\\mohit\\.nuget\\packages\\",
-        "outputPath": "E:\\final blog\\CodePulse.API-master\\CodePulse.API-master\\CodePulse.API\\obj\\",
+        "outputPath": "E:\\My-Blog\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\mohit\\AppData\\Roaming\\NuGet\\NuGet.Config",
