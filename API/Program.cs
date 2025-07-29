@@ -78,8 +78,9 @@ builder.Services.AddCors(options =>
             "https://blog-b8d99.web.app",                  // Firebase hosted app
             "https://blog-b8d99.firebaseapp.com"           // Firebase fallback
         )
+        .WithMethods("GET", "POST", "PUT", "DELETE")
         .AllowAnyHeader()
-        .AllowAnyMethod();
+        .WithExposedHeaders("*");
     });
 });
 
