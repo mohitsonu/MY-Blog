@@ -79,7 +79,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// app.UseHttpsRedirection(); // Not needed behind Render's reverse proxy
+app.UseHttpsRedirection();
 
 
 app.UseDefaultFiles();
