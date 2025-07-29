@@ -19,6 +19,18 @@ import { BlogDetailsComponent } from './features/public/blog-details/blog-detail
 import { LoginComponent } from './features/auth/login/login.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
+
+// ✅ Your Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyA4qHrjfR-7uDvvA0AkoDv6--v0x-Tq92c",
+  authDomain: "blog-b8d99.firebaseapp.com",
+  projectId: "blog-b8d99",
+  storageBucket: "blog-b8d99.firebasestorage.app",
+  messagingSenderId: "665636124994",
+  appId: "1:665636124994:web:a00dcc516ba74325d670db",
+  measurementId: "G-S5JFWMGFQW"
+};
+
 @NgModule({
   declarations: [
     AppComponent,
