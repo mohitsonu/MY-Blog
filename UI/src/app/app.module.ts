@@ -19,6 +19,9 @@ import { BlogDetailsComponent } from './features/public/blog-details/blog-detail
 import { LoginComponent } from './features/auth/login/login.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
+// ✅ Firebase imports
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideAnalytics, getAnalytics, ScreenTrackingService } from '@angular/fire/analytics';
 
 // ✅ Your Firebase configuration
 const firebaseConfig = {
@@ -51,14 +54,19 @@ const firebaseConfig = {
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
+
+    // ✅ Add Firebase & Analytics here
+    provideFirebaseApp(() => initializeApp(firebaseConfig)),
+    provideAnalytics(() => getAnalytics())
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    ScreenTrackingService // ✅ Optional but recommended
   ],
   bootstrap: [AppComponent]
 })
