@@ -9,39 +9,37 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Database context setup
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("CodePulseConnectionString"));
 });
-
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("CodePulseConnectionString"));
 });
 
-
+// Repositories
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
-
+// Identity setup
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("CodePulse")
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
+// Identity password options
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;
@@ -52,6 +50,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 1;
 });
 
+// JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -64,15 +63,29 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey =
-            new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(
+                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
 
+// CORS Policy for Angular (localhost) and Firebase hosting
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins(
+            "http://localhost:4200",                        // Local Angular dev
+            "https://blog-b8d99.web.app",                  // Firebase hosted app
+            "https://blog-b8d99.firebaseapp.com"           // Firebase fallback
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Development tools
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -81,21 +94,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+// Serve Angular frontend and static files
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseCors(options =>
-{
-    options.WithOrigins("http://localhost:4200", "https://my-blog-api.onrender.com", "https://blog-b8d99.web.app")
-           .AllowAnyHeader()
-           .AllowAnyMethod();
-});
+// Use CORS policy
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Create the Images directory if it doesn't exist
+// Serve image files
 var imagesDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
 if (!Directory.Exists(imagesDirectoryPath))
 {
@@ -104,13 +113,14 @@ if (!Directory.Exists(imagesDirectoryPath))
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    FileProvider = new PhysicalFileProvider(imagesDirectoryPath),
     RequestPath = "/Images"
 });
 
+// Map API controllers
 app.MapControllers();
 
-// Apply migrations on startup
+// Apply EF Core migrations automatically at startup
 using (var scope = app.Services.CreateScope())
 {
     var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
