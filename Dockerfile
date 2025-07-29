@@ -43,6 +43,6 @@ COPY --from=build-api /app/publish .
 # The API will be configured to serve these static files.
 COPY --from=build-ui /app/UI/dist ./wwwroot
 
-
+RUN mkdir -p /app/Images
 # Set the entry point for the application
 ENTRYPOINT ["dotnet", "CodePulse.API.dll"]
