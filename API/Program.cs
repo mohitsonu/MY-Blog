@@ -95,6 +95,13 @@ app.UseCors(options =>
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Create the Images directory if it doesn't exist
+var imagesDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
+if (!Directory.Exists(imagesDirectoryPath))
+{
+    Directory.CreateDirectory(imagesDirectoryPath);
+}
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
@@ -102,5 +109,15 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.MapControllers();
+
+// Apply migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+    var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    applicationDbContext.Database.Migrate();
+
+    var authDbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+    authDbContext.Database.Migrate();
+}
 
 app.Run();
