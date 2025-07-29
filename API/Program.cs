@@ -81,11 +81,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseCors(options =>
 {
-    options.AllowAnyHeader();
-    options.AllowAnyOrigin();
-    options.AllowAnyMethod();
+    options.WithOrigins("http://localhost:4200", "https://my-blog-api.onrender.com", "https://blog-b8d99.web.app")
+           .AllowAnyHeader()
+           .AllowAnyMethod();
 });
 
 app.UseAuthentication();
