@@ -2,11 +2,19 @@
 
 This project is a complete blog application built with Angular for the frontend and a separate REST API for the backend. It features a comprehensive Content Management System (CMS) for administrators and a clean, public-facing interface for readers.
 
+**Live Demo:** [https://blog-b8d99.web.app/](https://blog-b8d99.web.app/)
+
 ## Tech Stack
 
 *   **Frontend:** Angular, TypeScript
 *   **Styling:** Bootstrap
-*   **Backend:** A separate REST API (not included in this repository) that handles data for categories, blog posts, images, and authentication.
+*   **Backend:** .NET 7 REST API with PostgreSQL
+
+## Deployment
+
+This application is deployed with a decoupled architecture:
+*   **Frontend:** The Angular application is hosted on **Firebase Hosting**.
+*   **Backend:** The .NET API and PostgreSQL database are hosted on **Render**.
 
 ## Features
 
@@ -81,4 +89,3 @@ ng build --prod
 ## Further Help
 
 To get more help on the Angular CLI use `ng help` or go check out the Angular CLI Overview and Command Reference page.
-
